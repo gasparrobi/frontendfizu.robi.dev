@@ -1,0 +1,31 @@
+on:
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  fetch-and-save-job:
+    runs-on: ubuntu-latest
+    name: fetch and save json data
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: fetch and save permanent json data
+        uses: gasparrobi/github-action-fetch-and-save@master
+        id: permanent
+        with:
+          fetch-url: '${{ secrets.PERMANENT_URL }}'
+          file-path: ''
+          file-name: 'permanent.json'
+
+      - name: fetch and save b2b json data
+        uses: gasparrobi/github-action-fetch-and-save@master
+        id: b2b
+        with:
+          fetch-url: '${{ secrets.B2B_URL }}'
+          file-path: ''
+          file-name: 'b2b.json'
+
+      - name: commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: update
